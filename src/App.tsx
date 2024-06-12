@@ -11,9 +11,6 @@ const App = () => {
   const handleSubmit = async (event:any) => {
     event.preventDefault();
 
-    setFeedback('Loading...');
-    setScore('Loading...');
-
     const client = new MistralClient(apiKey);
 
     try {
@@ -47,7 +44,7 @@ const App = () => {
           },
           {
             role: 'system',
-            content: 'Give a rating on the question out of from 0 to 100, the output would just be X/100 dont provide any text as its already in a feedback, just give a number as an output, dont explain why its rated like this. Use these criteria to rate the question : clarity,relevance,complexity, orignilaity, accuracy, structure, grammar, spelling, punctuation, formatting, and style.'
+            content: 'Be severe,please rate the question on a scale from 0 to 100. Provide only a numerical score (e.g., 85/100) without additional text explanations remove commentaries. The outpust must be only an integer (for examle 50). Base your rating on the following criteria: clarity, relevance, complexity, originality, accuracy, structure, grammar, spelling, punctuation, formatting, and style.'
           }
         ],
       });
