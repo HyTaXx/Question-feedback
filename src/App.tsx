@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import MistralClient from '@mistralai/mistralai';
 
 const apiKey = "XzIHtMUxAkRvmu59OrKKMflXelzUgXpB"
@@ -8,7 +8,7 @@ const App = () => {
   const [feedback, setFeedback] = useState('');
   const [score, setScore] = useState('');
 
-  const handleSubmit = async (event:any) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
 
     const client = new MistralClient(apiKey);
@@ -17,9 +17,9 @@ const App = () => {
       const chatResponse = await client.chat({
         model: 'mistral-tiny',
         messages: [
-          { 
-            role: 'user', 
-            content: question 
+          {
+            role: 'user',
+            content: question
           },
           {
             role: 'system',
@@ -38,9 +38,9 @@ const App = () => {
       const chatResponse = await client.chat({
         model: 'mistral-tiny',
         messages: [
-          { 
-            role: 'user', 
-            content: question 
+          {
+            role: 'user',
+            content: question
           },
           {
             role: 'system',
@@ -49,7 +49,12 @@ const App = () => {
         ],
       });
 
-      setScore(chatResponse.choices[0].message.content);
+      // replace all that is not XX/XXX
+      const regex = /[^0-9/]/g;
+      const scoreString = chatResponse.choices[0].message.content;
+      const score = scoreString.replace(regex, '');
+
+      setScore(score);
     } catch (error) {
       console.error('Error fetching score:', error);
       setScore('Failed to get score.');
@@ -77,7 +82,8 @@ const App = () => {
         {score && <p className='font-medium mt-4 flex gap-4'>
           <span className="whitespace-nowrap"><b>Score :</b></span>
           <div className="w-full relative bg-neutral-200 rounded">
-            <div className={`absolute h-full top-0 bg-indigo-500 rounded`} style={{width: score === "Loading..." ? "0" : score.replace("/100", "%")}}></div>
+            <div className={`absolute h-full top-0 bg-indigo-500 rounded`}
+                 style={{width: score === "Loading..." ? "0" : score.replace("/100", "%")}}></div>
           </div>
           {score}
         </p>}
