@@ -11,6 +11,9 @@ const App = () => {
   const handleSubmit = async (event:any) => {
     event.preventDefault();
 
+    setFeedback('Loading...');
+    setScore('Loading...');
+
     const client = new MistralClient(apiKey);
 
     try {
@@ -57,20 +60,30 @@ const App = () => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className="max-w-2xl bg-white mx-auto p-4 shadow-md rounded m-2">
+      <form onSubmit={handleSubmit} className="grid">
         <label htmlFor="question">Enter your question:</label>
         <input
           type="text"
           id="question"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
+          placeholder={"What is the capital of France?"}
+          className="bg-neutral-100 p-2 rounded shadow mt-2"
         />
-        <button type="submit">Submit</button>
+        <button type="submit" className="p-2 bg-indigo-500 text-white font-semibold rounded w-fit mt-2">Submit</button>
       </form>
-      <div className='flex flex-col'>
-        {feedback && <p className='font-bold'>{feedback}</p>}
-        {score && <p className='font-bold'>Note : {score}</p>}
+      <div className="border-b border-neutral-300 my-4"></div>
+      <div className='flex flex-col mt-4'>
+        <h2 className="text-2xl font-bold mb-2">Feedback</h2>
+        {feedback && <p className='font-medium'>{feedback}</p>}
+        {score && <p className='font-medium mt-4 flex gap-4'>
+          <span className="whitespace-nowrap"><b>Score :</b></span>
+          <div className="w-full relative bg-neutral-200 rounded">
+            <div className={`absolute h-full top-0 bg-indigo-500 rounded`} style={{width: score === "Loading..." ? "0" : score.replace("/100", "%")}}></div>
+          </div>
+          {score}
+        </p>}
       </div>
     </div>
   );
